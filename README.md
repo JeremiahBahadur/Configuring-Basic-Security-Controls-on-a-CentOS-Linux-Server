@@ -53,6 +53,36 @@ Used yum install iptables-services to install the firewall, /sbin/service iptabl
 
 ![image](https://github.com/user-attachments/assets/2d868d27-fd81-4ad4-bbff-db53b220e29c)
 
+Futhermore, I hardened security measures on this server by enabling the sudo user account. Administrators may choose to grant authorized users limited root level access for a specific purpose. Sudo access also can be used to allow the administrator to audit the actions that authorized users take on the server. Any actions not specifically granted to the sudo user will require the actual root password. Sudo access allows a user to perform actions beyond his or her normal privileges assigned by the ACLs. It is a way to provide these privileges to a user without requiring him to log in as root. A compromised root user account will allow an attacker to compromise an entire Linux server and system. By not logging in as root user, your IP packets cannot be compromised, and it’s not possible for a hacker to conduct a Man-in-the-Middle attack.
+
+Used visudo to edit the sudoers file, the configuration file for the sudo users. First, I activated several command aliases, then I located and copied the following line:
+
+ 
+
+# %sys ALL = NETWORKING, SOFTWARE, SERVICES, STORAGE, DELEGATING, PROCESSES, LOCATE, DRIVERS
+
+ 
+
+I pasted the line twice in the file, changing the %sys designation to %wheel and %web to assign sudo access for each of the commands listed here to the wheel and web groups. Wheel is a pre-configured group that has access to all commands by default. To improve security controls on the CentOS Linux server, I explicitly defined the commands for the wheel group, then deactivated the default command access. Web is a new group.
+
+New command assignments:
+
+![image](https://github.com/user-attachments/assets/57bedbee-5a42-424c-aa2b-3bfef94fd69c)
+
+
+Next, I hardened security measures on this server by setting the immutable permission on a temporary file. An immutable designation means the file cannot be manipulated. The file becomes a read-only file that cannot be deleted, moved, or edited; even by someone with root level access. The immutable permission is an extended file attribute, beyond the usual read/write sort of access. Other extended file attributes include: append only (a), secure deletion (s).
+
+Created a temp file with touch /tmp/mytest and changed the file attributes with chattr +i /tmp/mytest and added the immutable flag (i) to the file permissions. Used lsattr /tmp/mytest to list the file attributes and verify that the immutable flag has been added to the file permissions.
+
+![image](https://github.com/user-attachments/assets/771262e1-8528-4b9a-b93b-e85de16aab69)
+
+Finally, I hardened security measures on this server by granting special permissions to allow a user access to the server’s log file. I assigned access control list permissions (ACL) to the wheel group. This was be done using the set file access control lists (setfacl) command and the get file access control lists (getfacl) commands. The setfacl command provides an extra layer of security defense by setting permissions for specific users or groups of users regarding access to files on the system. Setfacl helps system administrators define stringent access controls to specific files for ensuring confidentiality. The get file access control lists (getfacl) command displays existing ACLs.
+
+Used the command getfacl /var/log/messages to view the current ACL permissions for the log file. Added read ACL permissions to the wheel group for the log file with setfacl -m g:wheel:r /var/log/messages.Got the new ACL permissions for the log file and verified that they were set properly with getfacl /var/log/messages.
+
+Updated permissions for the log file:
+
+![image](https://github.com/user-attachments/assets/c6bd3132-fa16-4bea-8395-0dea799e2465)
 
 <br />
 
