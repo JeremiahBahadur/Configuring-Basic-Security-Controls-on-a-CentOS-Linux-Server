@@ -10,12 +10,6 @@ In this lab, I secured a Linux server system. I secured the bootloader, enabled 
 <br />
 
 
-<h2>Network Topology</h2>
-
-- TargetLinux01 (CentOS Linux)
-- TargetLinux02 (Xubuntu Linux)</b>
-- ![image](https://github.com/user-attachments/assets/f1694381-5810-4ad1-a768-af4577164aba)
-
 <h2>Tools and Software</h2>
 
 - iptables
